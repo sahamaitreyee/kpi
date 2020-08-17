@@ -1,0 +1,75 @@
+.header-class {
+    overflow: hidden;
+    padding: 2px;
+    width: 60%;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: skyblue;
+    display: block;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+
+.logo-class{
+    width: 200px;
+    height: 200px;
+    border-color: blue;
+    float: left;
+    border-radius: 25px;
+}
+
+.logo-class > img {
+    overflow: hidden;
+    width: 100%;
+    height: 95%;
+    padding: 2px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+
+.header-class > h1{
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+    text-shadow: slateblue;
+    color: darkmagenta;
+    font: bold ;
+    text-align: center;
+    display: inline;
+    padding: 20px;
+    font-size: xx-large;
+}
+
+nav{
+    float: right
+}
+nav li {
+    display: inline-block;
+    padding: 0 10px;
+    height: 50px;
+    font-size: 16px;
+    line-height: 50px;
+    border-radius: 25px;
+    background-color: #f1f1f1;
+}
+nav ol{
+    list-style-type: circle;
+}
+nav > a::after{
+    content: '>';
+}
+
+.mainbody{
+    display: block;
+    font-family: 'Courier New', Courier, monospace;
+    padding: 10px;
+    width: 60%;
+}
+
+.mainbody div{
+    padding: 5px;
+    display: block;
+    float: left;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    width: 48%;
+}
+
+.mainbody div:hover{
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}

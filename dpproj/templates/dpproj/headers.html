@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+
+<head>
+    <title>
+        KPI Application
+    </title>
+    <!-- CSS only -->
+    <link rel="stylesheet" href="{% static 'dpproj/pagestyle.css' %}" />
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+        integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+</head>
+
+<body class="text-center">
+    <header class="header">
+        <div class=row>
+            <div class="col-md-2">
+                <img src="{% static 'dpproj/logo.jpg' %}" alt="logo" class="logo-class" />
+            </div>
+            <div class="col-md-8 text-center"><h1 style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif">KPI Application</h1></div>
+            <div class="co-md-2 text-center p-0"><a href="{% url 'dpproj:logout' %}" style="color: red;" >Signout</a></div>
+        </div>
+    </header>
+    <div class="background">
+        <div class="bg-reset">
+            {% block content %}
+
+            {% endblock %}
+        </div>
+    </div>
+    <footer class="footer">
+        <p class="mt-5 mb-3 text-muted">©pcsglobal</p>
+    </footer>
+</body>
+
+</html>

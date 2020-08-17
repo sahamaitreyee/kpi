@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+<head>
+    <title>
+        Makeup box
+    </title>
+    <link rel="stylesheet" type="text/css" href=""}>
+</head>
+
+<body>
+    <section> 
+    {%if latest_question_list %} <!--passed from context-->
+        {%for question in latest_question_list %}
+        <div>
+            <h1>{{quesion.id}}</h1>
+            <details>
+                <summary>{{question.question_text}}</summary>
+                <a href="{% url 'kpi:index' question.id %}">Show Choices</a>
+            </details>
+        </div>
+        {%endfor%}
+    {%endif%}        
+    </section>  
+</body>

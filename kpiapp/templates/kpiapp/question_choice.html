@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+<head>
+    <title>
+        Makeup box
+    </title>
+    <link rel="stylesheet" type="text/css" href=""}>
+</head>
+
+<body>
+<div>
+    <h2>{{options.question_text}}</h2>
+
+    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+    {% if options%}
+
+    <form action="{% url 'kpi:vote' options.id %}" method="post">
+    {% csrf_token %}
+    <ul>
+        {% for choice in options.choice_set.all %}
+        <input type="radio" value="{{choice.id}}" name="choice" id="choice_{{forloop.counter}}">
+        <label>{{ choice.choice_text }}</label>
+        {% endfor %}
+    </ul> 
+    
+    <input type="submit" value="Vote">
+    </form>
+    {%endif%}
+</div>
+</body>
