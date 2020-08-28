@@ -1,0 +1,26 @@
+{% extends 'dpproj/headers.html' %}
+{% block content %}
+
+<!-- Menu Nav-->
+<div class="container-fluid">
+  <div class="row">
+    {% include 'dpproj/kpi_menu.html' %}
+    <p>Welcome {{user_email}}</p>
+    {{ error_message }}
+    {% if form.errors %}
+    <div class="alert alert-primary" role="alert">
+      {{form.errors}}
+    </div>
+    {% endif %}
+    <main class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+      <section class="registration">
+        <form method="POST" action="{% url 'dpproj:complete' user_email %}">
+          {% include 'dpproj/kpi_render_form.html' %}
+          <button class="btn btn-lg btn-primary" type="submit">Register</button>
+        </form>
+      </section>
+    </main>
+  </div>
+</div>
+
+{% endblock %}

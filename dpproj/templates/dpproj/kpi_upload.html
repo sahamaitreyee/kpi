@@ -1,0 +1,30 @@
+{% extends 'dpproj/headers.html' %}
+{% block content %}
+
+<!-- Menu Nav-->
+<div class="container-fluid">
+  <div class="row">
+    {% include 'dpproj/kpi_menu.html' %}
+    <p>Welcome {{user_email}}</p>
+    {{ error_message }}
+    {% if form.errors %}
+    <div class="alert alert-primary" role="alert">
+      {{form.errors}}
+    </div>
+    {% endif %}
+    <main class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+      {% if message %}
+      <div class="alert alert-success" role="alert">
+        {{message}}
+      </div>
+      {%endif %}
+      <form action="{% url 'dpproj:upload' user_email %}" method="post" class="form-inline text-center"
+        enctype="multipart/form-data">
+        {% include 'dpproj/kpi_render_form.html' %}
+        <button type="submit" class="btn btn-secondary">Upload</button>
+      </form>
+    </main>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,11 @@
+{% csrf_token %}
+<div class="input-group mb-3 text-left">
+    {% for field in form %}
+    <div class="form-group">
+        {{ field.errors }}
+        {{ field.label_tag }} {{ field }}
+        {% if field.help_text %}
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>

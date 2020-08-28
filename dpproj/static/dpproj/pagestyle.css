@@ -10,7 +10,6 @@
 
 .background{
     background-attachment: fixed;
-    background:  linear-gradient(rgba(255, 0, 255, 0.068),rgba(255,155,0,0.3));
     z-index: -1;
 }
 .logo-class{
@@ -27,4 +26,8 @@
     height: 95%;
     padding: 2px;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+
+.nav > li > a:hover{
+    background-color:rgb(202, 21, 178);
 }
