@@ -3,13 +3,14 @@
 <!-- Menu Nav-->
 <div class="container-fluid">
   <div class="row">
-    {% include 'dpproj/kpi_menu.html' %}
     <p>Welcome {{user_email}}</p>
-  </hr>
+    {% include 'dpproj/kpi_menu.html' %}
     {{ message }}
     <main class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
       <section class="registration">
+        <div class="table">
         {{data}}
+      </div>
       </section>
     </main>
   </div>

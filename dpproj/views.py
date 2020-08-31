@@ -7,8 +7,10 @@ from django.contrib.auth import authenticate, login, logout
 import logging
 from dpproj.RegistrationForm import RegistrationForm, UploadFileForm
 from collections import OrderedDict as SortedDict
-import xlrd
-
+from xlrd import open_workbook, xldate_as_tuple
+from xlrd.sheet import XL_CELL_DATE
+from datetime import date, datetime, time
+from django.core import serialization
 
 # Create your views here.
 
@@ -73,9 +75,9 @@ def kpi_registration_complete(request, user):
         else:
             form = RegistrationForm(request.POST)
             if form.is_valid():
-                instance = form.save()
+                instance = serialization.serialize('json',form.save())
                 # get properties as dict
-                return render(request, 'dpproj/kpi_reg_complete.html', {"user_email": instance.email_add, "data": instance, "message": "Registation Successful"})
+                return render(request, 'dpproj/kpi_reg_complete.html', {"user_email": user, "data":instance , "message": "Registation Successful"})
             else:
                 return render(request, 'dpproj/kpi_registration.html', {"user_email": user, "form": form, "error_message": "Invalid Data"})
     else:
@@ -89,17 +91,26 @@ def kpi_upload(request, user):
         else:
             form = UploadFileForm(request.POST, request.FILES)
             if form.is_valid():
+                error=[]
+                count=0
                 try:
                     # get the data as collection of sheets
-                    for f in get_converted_data(request['FILE']):
+                    for f in get_converted_data(request.FILES['file']):
                         # for each row in a single sheet
                         for data in f:
-                            # expand the data from dict
-                            r = Registration(**data)
-                            r.save()
-                    return render(request, 'dpproj/kpi_upload.html', {"user_email": user, "form": UploadFileForm(), "message": "excel upload successful"})
-                except Exception:
-                    return render(request, 'dpproj/kpi_upload.html', {"user_email": user, "form": UploadFileForm(), "message": "Invalid Excel"})
+                            count=count+1
+                            d=RegistrationForm(data, instance=Registration())
+                            if(d.is_valid()):
+                                d.save()
+                            else:
+                                error.append("Row{}.{}".format(count,d.errors))
+                except Exception as e:
+                    return render(request, 'dpproj/kpi_upload.html', {"user_email": user, "form": UploadFileForm(), "message": "Invalid Excel.{}".format(e)})
+                else:
+                    if len(error)>0:
+                        return render(request, 'dpproj/kpi_upload.html', {"user_email": user, "form": UploadFileForm(), "message": "Falied for Some row.{}".format(error)})
+                    else:
+                        return render(request, 'dpproj/kpi_upload.html', {"user_email": user, "form": UploadFileForm(), "message": "excel upload successful"})
             else:
                 return render(request, 'dpproj/kpi_upload.html', {"user_email": user, "form": UploadFileForm()})
 
@@ -107,22 +118,24 @@ def kpi_upload(request, user):
         return redirect('dpproj:index')
 
 
+#helper functions 
 def convert_to_dict(sheet):
     first_row = sheet.row(0)
-    fields = map(lambda cell: cell.value, first_row)
+    fields = list(map(lambda cell: cell.value, first_row[1:])) #skip first column
     converted_data = []
+    print(sheet.nrows)
     for rx in range(1, sheet.nrows):
         row = sheet.row(rx)
         if not row:
             continue
-        values = map(lambda cell: cell.value, row)
+        values = list(map(lambda cell: datetime(*xldate_as_tuple(cell.value, sheet.book.datemode)) if cell.ctype==XL_CELL_DATE else cell.value, row[1:]))
         item_data = SortedDict(zip(fields, values))
         converted_data.append(item_data)
     return converted_data
 
 
 def get_converted_data(excel_file):
-    book = xlrd.open_workbook(
+    book = open_workbook(
         file_contents=excel_file.read(), encoding_override='utf-8'
     )
     return [convert_to_dict(sheet) for sheet in book.sheets()]

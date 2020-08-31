@@ -4,8 +4,8 @@
 <!-- Menu Nav-->
 <div class="container-fluid">
   <div class="row">
-    {% include 'dpproj/kpi_menu.html' %}
     <p>Welcome {{user_email}}</p>
+    {% include 'dpproj/kpi_menu.html' %}
     {{ error_message }}
     {% if form.errors %}
     <div class="alert alert-primary" role="alert">

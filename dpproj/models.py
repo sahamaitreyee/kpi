@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-
+from django.core.serializers.json import DjangoJSONEncoder
 # Create your models here.
 class Login(models.Model):
     user_name=models.CharField(max_length=20)
@@ -8,11 +8,10 @@ class Login(models.Model):
     def __str__(self):
         return self.user_name
 
-class Answer(models.IntegerChoices):
-    NO = 0, _('No')
-    YES = 1, _('Yes')
-
-    __empty__ = _('(Unknown)')
+class Answer(float, models.Choices):
+    NO = 0.0, _('No')
+    YES = 1.0, _('Yes')
+    (Unknown)=-1.0,_('(Unknown)')
 
 class Registration(models.Model):
     
@@ -24,47 +23,52 @@ class Registration(models.Model):
     )
 
     gender_info=(
-        ('m','male'),
-        ('f','female')
+        ('male','male'),
+        ('female','female')
     )
 
     deg_info=(
         ('bba','Bachelors of Business Admin.'),
-        ('bse','Bachelors of Science'),
+        ('bsc','Bachelors of Science'),
         ('be','Bachelors of Engineering'),
-        ('bca','Bachelors of Comp. Application')
+        ('bca','Bachelors of Comp. Application'),
+        ('others','Others')
     )
 
     pg_deg_info=(
         ('me','Master of Engineering'),
         ('mca','Master of Comp. Application'),
         ('mba','Master of Business Admin.'),
-        ('mstat','Master of Stat')
+        ('mstat','Master of Stat'),
+        ('not done','NA')
     )
     stream=(
         ('ECE','Electronice & Communication'),
         ('EEE', 'Electrical Engineering'),
         ('CS','Computer Scienec'),
-
+        ('NOT FOUND','Not Applicable')
+    )
+    yes_no=(
+        ('yes','Yes'),
+        ('no','No')
     )
     
-    user_name=models.CharField(max_length=20)
-    user_last_name=models.CharField(max_length=50)
-    user_dob=models.DateTimeField()
-    user_gender=models.CharField(max_length=1, choices=gender_info, blank=False)
-    aadhar_card_no=models.CharField(max_length=16)
-    joining_date=models.DateTimeField()
+    name=models.CharField(max_length=20)
+    dob=models.DateField()
+    gender=models.CharField(max_length=6, choices=gender_info, default='female', blank=False)
+    aadhar_card_number=models.CharField(max_length=16)
+    joining_date=models.DateField()
     last_passout_year=models.IntegerField()
     graduate_degree=models.CharField(max_length=6,default='others',choices=deg_info, blank=False)
-    pg_degree=models.CharField(max_length=6, default='not done', choices=pg_deg_info, blank=False)
-    graduate_stream=models.CharField(max_length=8, default='NOT FOUND', choices=stream, blank=False)
-    pg_stream=models.CharField(max_length=8, default='NOT FOUND', choices=stream, blank=False)
-    pg_yes_or_no=models.CharField(max_length=3, choices=Answer.choices)
+    pg_degree=models.CharField(max_length=8, default='not done', choices=pg_deg_info, blank=False)
+    graduate_stream=models.CharField(max_length=9, default='NOT FOUND', choices=stream, blank=False)
+    pg_stream=models.CharField(max_length=9, default='NOT FOUND', choices=stream, blank=False)
+    pg_yes_or_no=models.CharField(max_length=3,choices=yes_no, default='no')
     it_exp_months=models.IntegerField()
-    not_it_exp_months=models.IntegerField()
-    freshers=models.IntegerField(choices=Answer.choices)
+    non_it_exp_months=models.IntegerField()
+    freshers=models.FloatField(choices=Answer.choices, default=Answer.NO)
 
     def __str__(self):
-        return '{}.{}'.format(self.user_name,self.user_last_name)
+        return '{}.{}.{}'.format(self.name,self.joining_date,self.graduate_degree)
     class Meta:
-        ordering=['user_name']
+        ordering=['name']

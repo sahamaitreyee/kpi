@@ -11,6 +11,14 @@
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
         integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+        $(function () {
+            $('.datepicker').datepicker({});
+        });
+    </script>
 </head>
 
 <body class="text-center">
@@ -19,8 +27,13 @@
             <div class="col-md-2">
                 <img src="{% static 'dpproj/logo.jpg' %}" alt="logo" class="logo-class" />
             </div>
-            <div class="col-md-8 text-center"><h1 style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif">KPI Application</h1></div>
-            <div class="co-md-2 text-center p-0"><a href="{% url 'dpproj:logout' %}" style="color: red;" >Signout</a></div>
+            <div class="col-md-8 text-center">
+                <h1
+                    style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif">
+                    KPI Application</h1>
+            </div>
+            <div class="co-md-2 text-center p-0"><a href="{% url 'dpproj:logout' %}" style="color: red;">Signout</a>
+            </div>
         </div>
     </header>
     <div class="background">
@@ -30,9 +43,10 @@
             {% endblock %}
         </div>
     </div>
-</hr>
+    </hr>
     <footer class="footer">
         <p class="mt-5 mb-3 text-muted">©pcsglobal</p>
     </footer>
 </body>
+
 </html>
