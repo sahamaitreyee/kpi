@@ -12,6 +12,7 @@ class RegistrationForm(ModelForm):
         widgets={
             'dob':forms.DateInput(format='%m/%d/%Y', attrs={'class': 'datepicker'}),
             'joining_date': forms.DateInput(format='%m/%d/%Y', attrs={'class': 'datepicker'}),
+            'feedback':forms.Textarea()
         }
         labels = {
             'name': _('Candidate Name'),
@@ -27,7 +28,9 @@ class RegistrationForm(ModelForm):
             'pg_yes_or_no': _('PG Available'),
             'it_exp_months': _('IT Exp (Months)'),
             'non_it_exp_months': _('Non IT Exp (Months)'),
-            'freshers': _('Freshers')
+            'freshers': _('Freshers'),
+            'feedback':_('Feedback')
+
         }
       
 

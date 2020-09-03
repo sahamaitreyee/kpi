@@ -10,7 +10,7 @@ from collections import OrderedDict as SortedDict
 from xlrd import open_workbook, xldate_as_tuple
 from xlrd.sheet import XL_CELL_DATE
 from datetime import date, datetime, time
-from django.core import serialization
+from django.core import serializers
 
 # Create your views here.
 
@@ -75,7 +75,7 @@ def kpi_registration_complete(request, user):
         else:
             form = RegistrationForm(request.POST)
             if form.is_valid():
-                instance = serialization.serialize('json',form.save())
+                instance = serializers.serialize('json',form.save())
                 # get properties as dict
                 return render(request, 'dpproj/kpi_reg_complete.html', {"user_email": user, "data":instance , "message": "Registation Successful"})
             else:
