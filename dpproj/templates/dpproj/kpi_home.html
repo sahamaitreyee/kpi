@@ -3,10 +3,10 @@
 <!-- Menu Nav-->
 <div class="container-fluid">
   <div class="row">
-    <p>Welcome {{user_email}}</p>
     {% include 'dpproj/kpi_menu.html' %}
+    <p>Welcome {{user_email}}</p>
     <main class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-        <!--sample body element -->
+      <div class="block"> Total rows in table : {{data}}</div>
     </main>
   </div>
 </div>

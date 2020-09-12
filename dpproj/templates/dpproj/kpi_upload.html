@@ -4,20 +4,19 @@
 <!-- Menu Nav-->
 <div class="container-fluid">
   <div class="row">
-    <p>Welcome {{user_email}}</p>
     {% include 'dpproj/kpi_menu.html' %}
-    {{ error_message }}
-    {% if form.errors %}
-    <div class="alert alert-primary" role="alert">
-      {{form.errors}}
-    </div>
-    {% endif %}
+    <p>Welcome {{user_email}}</p>
     <main class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+      {% if error_message %}
+      <div class="alert alert-danger" role="alert">
+        {{error_message}}
+      </div>
+      {% endif %}
       {% if message %}
       <div class="alert alert-success" role="alert">
         {{message}}
       </div>
-      {%endif %}
+      {% endif %}
       <form action="{% url 'dpproj:upload' user_email %}" method="post" class="form-inline text-center"
         enctype="multipart/form-data">
         {% include 'dpproj/kpi_render_form.html' %}

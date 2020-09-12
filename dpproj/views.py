@@ -54,7 +54,7 @@ def logout_user(request):
 
 def kpi(request, user):
     if request.user.is_authenticated:
-        return render(request, 'dpproj/kpi_home.html', {"user_email": user})
+        return render(request, 'dpproj/kpi_home.html', {"user_email": user,  "data": Registration.objects.count()})
     else:
         return redirect('dpproj:index')
 
@@ -108,7 +108,7 @@ def kpi_upload(request, user):
                     return render(request, 'dpproj/kpi_upload.html', {"user_email": user, "form": UploadFileForm(), "message": "Invalid Excel.{}".format(e)})
                 else:
                     if len(error)>0:
-                        return render(request, 'dpproj/kpi_upload.html', {"user_email": user, "form": UploadFileForm(), "message": "Falied for Some row.{}".format(error)})
+                        return render(request, 'dpproj/kpi_upload.html', {"user_email": user, "form": UploadFileForm(), "error_message": "Falied for Some row.{}".format(error)})
                     else:
                         return render(request, 'dpproj/kpi_upload.html', {"user_email": user, "form": UploadFileForm(), "message": "excel upload successful"})
             else:

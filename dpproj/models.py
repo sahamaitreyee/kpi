@@ -32,7 +32,11 @@ class Registration(models.Model):
         ('bsc','Bachelors of Science'),
         ('be','Bachelors of Engineering'),
         ('bca','Bachelors of Comp. Application'),
-        ('others','Others')
+        ('bcom','Bachelors of Commerce'),
+        ('bstat','Bachelors of Statistics'),
+        ('b.tech','Bachelors of Technology'),
+        ('others','Others'),
+        ('not found','Not found')
     )
 
     pg_deg_info=(
@@ -40,13 +44,19 @@ class Registration(models.Model):
         ('mca','Master of Comp. Application'),
         ('mba','Master of Business Admin.'),
         ('mstat','Master of Stat'),
-        ('not done','NA')
+        ('not done','NA'),
+        ('msc','Master of Science'),
+        ('mca','Master of Computer Application'),
+        ('others','others'),
+        ('mtech','Master of Technology'),
+        ('mcom','Master of Commerce')
     )
     stream=(
         ('ECE','Electronice & Communication'),
-        ('EEE', 'Electrical Engineering'),
+        ('EE', 'Electrical Engineering'),
         ('CS','Computer Scienec'),
-        ('NOT FOUND','Not Applicable')
+        ('NOT FOUND','Not Applicable'),
+        ('No Stream','No Stream')
     )
     yes_no=(
         ('yes','Yes'),
@@ -57,8 +67,8 @@ class Registration(models.Model):
         ('No','No')
     ) 
     yes_no_notfound=(
-        ('YES','YES'),
-        ('NO','NO'),
+        ('Yes','YES'),
+        ('No','NO'),
         ('NOT FOUND','NOT FOUND')
     )
     state=(
@@ -70,13 +80,17 @@ class Registration(models.Model):
         ('Rajasthan','Rajasthan'),
         ('Karnataka','Karnataka'),
         ('Andhrapradesh','Andhra Pradesh'),
-        ('Jharkhnd','Jharkhand'),
+        ('Jharkhand','Jharkhand'),
         ('Delhi','Delhi'),
         ('Ladakh','Ladakh'),
         ('Punjab','Punjab'),
         ('Himachal Pradesh','Himachal Pradesh'),
         ('Telangana','Telangana'),
-        ('Andaman and Nicobar Islands','Andaman and Nicobar Islands')
+        ('Andaman and Nicobar Islands','Andaman and Nicobar Islands'),
+        ('Maharashtra','Maharashtra'),
+        ('Jammu and Kashmir','Jammu and Kashmir'),
+        ('Assam','Assam'),
+        ('Odisha','Odisha')
     )
     
     interest_choices=(
@@ -98,22 +112,23 @@ class Registration(models.Model):
     social_ref=(
         ('Facebook','Facebook'),
         ('LinkedIn','LinkedIn'),
-        ('Consultancy','Consultancy')
+        ('Consultancy','Consultancy'),
+        ('Others','Others')
     )
     joining_status=(
         ('Called for HR Round','Called For HR Round'),
         ('HR Round Complete','HR Round Completed'),
-        ('Direct Joining','Direct Joining'),
+        ('Direct joining','Direct Joining'),
         ('Confirmed but not join','Confirmed but not join')
     )
 
-    name=models.CharField(max_length=20)
+    name=models.CharField(max_length=100)
     dob=models.DateField()
     gender=models.CharField(max_length=6, choices=gender_info, default='female', blank=False)
     aadhar_card_number=models.CharField(max_length=16)
     joining_date=models.DateField()
     last_passout_year=models.IntegerField()
-    graduate_degree=models.CharField(max_length=6,default='others',choices=deg_info, blank=False)
+    graduate_degree=models.CharField(max_length=10,default='others',choices=deg_info, blank=False)
     pg_degree=models.CharField(max_length=8, default='not done', choices=pg_deg_info, blank=False)
     graduate_stream=models.CharField(max_length=9, default='NOT FOUND', choices=stream, blank=False)
     pg_stream=models.CharField(max_length=9, default='NOT FOUND', choices=stream, blank=False)
@@ -126,7 +141,7 @@ class Registration(models.Model):
     graduate_cgpa=models.FloatField()
     pg_cgpa=models.FloatField()
     aptitude_score=models.IntegerField(default=0)
-    have_laptop=models.CharField(max_length=10,choices=yes_no_notfound, default='NOTFOUND')
+    have_laptop=models.CharField(max_length=10,choices=yes_no_notfound, default='No')
     state_location=models.CharField(max_length=30,choices=state,blank=False)
     district_location=models.CharField(max_length=30, default='na')
     purpuse_of_visit=models.CharField(max_length=10,choices=(('CLP','CLP'),('Internship','Internship')), default='Internship')
