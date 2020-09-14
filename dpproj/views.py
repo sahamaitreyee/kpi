@@ -11,6 +11,13 @@ from xlrd import open_workbook, xldate_as_tuple
 from xlrd.sheet import XL_CELL_DATE
 from datetime import date, datetime, time
 from django.core import serializers
+from .visualization import Visualization
+
+
+from bokeh.plotting import figure 
+from bokeh.io import output_notebook, show
+
+
 
 # Create your views here.
 
@@ -33,13 +40,13 @@ def login_validation(request):
             user = Login.objects.get(
                 user_name=form.cleaned_data.get('username'))
         except(KeyError, Login.DoesNotExist):
-            return redirect('{}?{}'.format(reverse('dpproj:index'), urlencode({"error_message": "Register User"})))
+            return render(request, 'dpproj/login.html',{"form":form,"error_message": "Register User"})
         # check user exists in django auth model
         authuser = authenticate(
             request, username=user.user_name, password=form.cleaned_data.get('password'))
         print(authuser is None)
         if authuser is None:
-            return redirect('{}?{}'.format(reverse('dpproj:index'), urlencode({"error_message": "Invalid User"})))
+            return render(request,'dpproj/login.html',{"form":form,"error_message": "Invalid User"})
         else:
             login(request, authuser)
             return redirect('dpproj:kpi', user=user.user_email)
@@ -117,6 +124,24 @@ def kpi_upload(request, user):
     else:
         return redirect('dpproj:index')
 
+def get_visualization(request, user):
+    if request.user.is_authenticated:
+        try:
+            v=Visualization()
+            script,div=v.get_charts(fields=['state_location','gender'])
+            print(script)
+            print(div)
+        except Exception  as e:
+            return render(request,'dpproj/kpi_visualization.html', 
+                {
+                    "user_email":user,
+                    "error_message": "Some error while getting visualization {}".format(e),
+                }
+            )
+
+        return render(request, 'dpproj/kpi_visualization.html', {'user_email':user,"addl_scripts":script, "load_div":div })
+    else: 
+        return redirect('dpproj:index')
 
 #helper functions 
 def convert_to_dict(sheet):
@@ -139,3 +164,5 @@ def get_converted_data(excel_file):
         file_contents=excel_file.read(), encoding_override='utf-8'
     )
     return [convert_to_dict(sheet) for sheet in book.sheets()]
+
+    

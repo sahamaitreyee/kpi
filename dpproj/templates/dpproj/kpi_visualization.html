@@ -1,0 +1,22 @@
+{% extends 'dpproj/headers.html' %}
+{% load static %}
+{% block content %}
+<!-- Menu Nav-->
+<div class="container-fluid">
+    <div class="row">
+        {% include 'dpproj/kpi_menu.html' %}
+        <p>Welcome {{user_email}}</p>
+        <main class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+            {% if error_message %}
+            <div class="alert alert-danger" role="alert">
+              {{error_message}}
+            </div>
+            {% endif %}
+            <section class="">
+                {{load_div}}
+            </section>
+        </main>
+    </div>
+</div>
+
+{% endblock %}

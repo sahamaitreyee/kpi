@@ -19,6 +19,10 @@
             $('.datepicker').datepicker({});
         });
     </script>
+    <!-- load exteral scripts if requried -->
+    {% if addl_scripts %}
+    {{addl_scripts}}
+    {% endif %}
 </head>
 
 <body class="text-center">

@@ -1,0 +1,14 @@
+group by 
+// get the data frame 
+assuming there is a registration object in django model with column state_locatio, gender
+import pandas as pd
+import dpproj.models import Registration 
+df_state=pd.DataFrame(Registration.objects.all().values(), columns=['state_location','gender'])
+// group by only state
+df_state.groupby('state_location').groups
+// name and group are two default fields in groupbyobject 
+for name,group in df_state.groupby('state_location'):
+	print name 
+	print group
+// group by agg 
+pd.DataFrame(Registration.objects.all().values, columns=['state_location']).groupby('state_location').agg(len)
