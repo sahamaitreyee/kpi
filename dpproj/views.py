@@ -131,7 +131,9 @@ def get_visualization(request, user):
         else:
             try:
                 form = SelectionForm(request.POST)
-                choice=form.cleaned_data.get('selection')
+                choice=""
+                if(form.is_valid()):
+                    choice=form.cleaned_data['selection']
                 content=""
                 v=Visualization()
                 if(choice=='BAR'):

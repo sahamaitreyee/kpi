@@ -38,4 +38,4 @@ class UploadFileForm(forms.Form):
     file = forms.FileField()    
 
 class SelectionForm(forms.Form):
-    selection=forms.ChoiceField(choices=(('BAR','KPI ReportA'),('CHRT','KPI Report B')))
+    selection=forms.ChoiceField(choices=(('CHRT','KPI Report A'),('BAR','KPI Report B')))

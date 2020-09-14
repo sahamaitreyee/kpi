@@ -16,7 +16,7 @@
                 {{error_message}}
             </div>
             {% endif %}
-            <form action="{% url 'dpproj:visual' user_email %}" method="post" class="form-inline text-center">
+            <form action="{% url 'dpproj:visual' user_email %}" method="post">
                 {% include 'dpproj/kpi_render_form.html' %}
                 <button type="submit" class="btn btn-primary">Get Report</button>
             </form>
