@@ -3,8 +3,8 @@
 {% block content %}
 <!-- Menu Nav-->
 <script>
-    datax={{data|safe}}
-    Bokeh.embed.embed_item(datax,"plot")
+    datax = {{ data | safe }}
+    Bokeh.embed.embed_item(datax, "plot")
 </script>
 <div class="container-fluid">
     <div class="row">
@@ -13,12 +13,16 @@
         <main class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
             {% if error_message %}
             <div class="alert alert-danger" role="alert">
-              {{error_message}}
+                {{error_message}}
             </div>
             {% endif %}
+            <form action="{% url 'dpproj:visual' user_email %}" method="post" class="form-inline text-center">
+                {% include 'dpproj/kpi_render_form.html' %}
+                <button type="submit" class="btn btn-primary">Get Report</button>
+            </form>
             <section class="">
-               <div  class="bk-root" id="plot"></div>
-``          </section>
+                <div class="bk-root" id="plot"></div>
+            </section>
         </main>
     </div>
 </div>

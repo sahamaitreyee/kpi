@@ -24,7 +24,7 @@ class Visualization:
             print(field)
             d=self.get_dist(col_name=field)
             print(d)
-            p=figure(title="Distribution of {}".format(field), plot_width=750, plot_height=750, tools="hover",toolbar_location=None,x_range=(-0.5,1.0))
+            p=figure(title="Distribution of {}".format(field), plot_width=500, plot_height=500, tools="hover",toolbar_location=None,x_range=(-0.5,1.0))
             data=pd.Series(d).reset_index(name='value').rename(columns={'index':'field'})
             data['angle']=data['value']/data['value'].sum()*2*pi
             data['color']=Category20c[len(d)]
@@ -41,7 +41,22 @@ class Visualization:
             plots.append(p)
         return json.dumps(json_item(gridplot(plots, ncols=2)))
 
-
+    def get_bar_plots(self, fields):
+        plots=[]
+        for field in fields:
+            d=self.get_dist(col_name=field)
+            p=figure(title="Distribution of {}".format(field), plot_width=500, plot_height=500, tools="hover",toolbar_location=None,x_range=(-0.5,1.0))
+            data=pd.Series(d).reset_index(name='value').rename(columns={'index':'field'})
+            data['color']=Category20c[len(d)]
+            data['relative']=data['value']/sum(data['value'])
+            p.vbar(width=1,source=data, top='relative', bottom=0, 
+                 line_color="green"
+                ,fill_color='color'
+                ,legend_field='field')
+            p.xaxis.axis_label=field
+            p.yaxis.axis_label="Count"
+            plots.append(p)
+        return json.dumps(json_item(gridplot(plots, ncols=2)))
 
 
             

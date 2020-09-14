@@ -5,7 +5,7 @@ from .models import Login, Registration
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
 import logging
-from dpproj.RegistrationForm import RegistrationForm, UploadFileForm
+from dpproj.RegistrationForm import RegistrationForm, UploadFileForm,SelectionForm
 from collections import OrderedDict as SortedDict
 from xlrd import open_workbook, xldate_as_tuple
 from xlrd.sheet import XL_CELL_DATE
@@ -126,18 +126,29 @@ def kpi_upload(request, user):
 
 def get_visualization(request, user):
     if request.user.is_authenticated:
-        try:
-            v=Visualization()
-            content=v.get_charts(fields=['state_location','gender'])
-        except Exception  as e:
-            return render(request,'dpproj/kpi_visualization.html', 
-                {
-                    "user_email":user,
-                    "error_message": "Some error while getting visualization {}".format(e),
-                }
-            )
+        if request.method != 'POST':
+            return render(request, 'dpproj/kpi_visualization.html', {"user_email": user, "form": SelectionForm()})
+        else:
+            try:
+                form = SelectionForm(request.POST)
+                choice=form.cleaned_data.get('selection')
+                content=""
+                v=Visualization()
+                if(choice=='BAR'):
+                    content=v.get_bar_plots(fields=['last_passout_year','it_exp_months'])
+                else:
+                    content=v.get_charts(fields=['state_location','gender','graduate_stream','pg_stream'])
+                
+            except Exception  as e:
+                return render(request,'dpproj/kpi_visualization.html', 
+                    {
+                        "user_email":user,
+                        "error_message": "Some error while getting visualization {}".format(e),
+                        "form":SelectionForm()
+                    }
+                )
 
-        return render(request, 'dpproj/kpi_visualization.html', {'user_email':user,"data":content })
+        return render(request, 'dpproj/kpi_visualization.html', {'user_email':user,"data":content, "form":SelectionForm() })
     else: 
         return redirect('dpproj:index')
 
