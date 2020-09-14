@@ -6,8 +6,8 @@ from math import pi
 from bokeh.transform import cumsum
 from bokeh.palettes import Category20c
 from bokeh.layouts import gridplot
-from bokeh.embed import components
-from os import getcwd
+from bokeh.embed import json_item
+import json
 
 class Visualization:
 
@@ -24,7 +24,7 @@ class Visualization:
             print(field)
             d=self.get_dist(col_name=field)
             print(d)
-            p=figure(title="Distribution of {}".format(field), plot_width=300, plot_height=300, tools="hover",toolbar_location=None,x_range=(-0.5,1.0))
+            p=figure(title="Distribution of {}".format(field), plot_width=750, plot_height=750, tools="hover",toolbar_location=None,x_range=(-0.5,1.0))
             data=pd.Series(d).reset_index(name='value').rename(columns={'index':'field'})
             data['angle']=data['value']/data['value'].sum()*2*pi
             data['color']=Category20c[len(d)]
@@ -39,7 +39,7 @@ class Visualization:
             p.axis.visible=False
             p.grid.grid_line_color=None
             plots.append(p)
-        return components(gridplot(plots, ncols=2))
+        return json.dumps(json_item(gridplot(plots, ncols=2)))
 
 
 

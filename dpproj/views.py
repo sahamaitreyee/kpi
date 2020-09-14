@@ -128,9 +128,7 @@ def get_visualization(request, user):
     if request.user.is_authenticated:
         try:
             v=Visualization()
-            script,div=v.get_charts(fields=['state_location','gender'])
-            print(script)
-            print(div)
+            content=v.get_charts(fields=['state_location','gender'])
         except Exception  as e:
             return render(request,'dpproj/kpi_visualization.html', 
                 {
@@ -139,7 +137,7 @@ def get_visualization(request, user):
                 }
             )
 
-        return render(request, 'dpproj/kpi_visualization.html', {'user_email':user,"addl_scripts":script, "load_div":div })
+        return render(request, 'dpproj/kpi_visualization.html', {'user_email':user,"data":content })
     else: 
         return redirect('dpproj:index')
 

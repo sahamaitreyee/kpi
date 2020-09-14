@@ -2,6 +2,10 @@
 {% load static %}
 {% block content %}
 <!-- Menu Nav-->
+<script>
+    datax={{data|safe}}
+    Bokeh.embed.embed_item(datax,"plot")
+</script>
 <div class="container-fluid">
     <div class="row">
         {% include 'dpproj/kpi_menu.html' %}
@@ -13,8 +17,8 @@
             </div>
             {% endif %}
             <section class="">
-                {{load_div}}
-            </section>
+               <div  class="bk-root" id="plot"></div>
+``          </section>
         </main>
     </div>
 </div>
