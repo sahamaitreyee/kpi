@@ -12,3 +12,7 @@ for name,group in df_state.groupby('state_location'):
 	print group
 // group by agg 
 pd.DataFrame(Registration.objects.all().values, columns=['state_location']).groupby('state_location').agg(len)
+
+Bokeh tutorial with panda 
+https://programminghistorian.org/en/lessons/visualizing-with-bokeh
+https://docs.bokeh.org/en/latest/docs/user_guide/styling.html?highlight=axis%20orientation#legends

@@ -12,7 +12,7 @@ from xlrd.sheet import XL_CELL_DATE
 from datetime import date, datetime, time
 from django.core import serializers
 from .visualization import Visualization
-
+import json
 
 from bokeh.plotting import figure 
 from bokeh.io import output_notebook, show
@@ -82,9 +82,11 @@ def kpi_registration_complete(request, user):
         else:
             form = RegistrationForm(request.POST)
             if form.is_valid():
-                instance = serializers.serialize('json',form.save())
+                instance = form.save()
+                save_data=serializers.serialize('json',Registration.objects.filter(pk=instance.id))
+                j=json.loads(save_data)
                 # get properties as dict
-                return render(request, 'dpproj/kpi_reg_complete.html', {"user_email": user, "data":instance , "message": "Registation Successful"})
+                return render(request, 'dpproj/kpi_reg_complete.html', {"user_email": user, "data":j[0]['fields'], "message": "Registation Successful", "form":RegistrationForm()})
             else:
                 return render(request, 'dpproj/kpi_registration.html', {"user_email": user, "form": form, "error_message": "Invalid Data"})
     else:
@@ -137,9 +139,9 @@ def get_visualization(request, user):
                 content=""
                 v=Visualization()
                 if(choice=='BAR'):
-                    content=v.get_bar_plots(fields=['last_passout_year','it_exp_months'])
+                    content=v.get_bar_plots(fields=['last_passout_year','it_exp_months','state_location'])
                 else:
-                    content=v.get_charts(fields=['state_location','gender','graduate_stream','pg_stream'])
+                    content=v.get_charts(fields=['gender','graduate_stream','pg_stream'])
                 
             except Exception  as e:
                 return render(request,'dpproj/kpi_visualization.html', 

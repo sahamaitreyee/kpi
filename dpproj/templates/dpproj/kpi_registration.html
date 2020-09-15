@@ -1,6 +1,10 @@
 {% extends 'dpproj/headers.html' %}
 {% block content %}
-
+<script>
+  if (window.history.replaceState) {
+    window.history.replaceState(null, null, window.location.href);
+  }
+</script>
 <!-- Menu Nav-->
 <div class="container-fluid">
   <div class="row">
