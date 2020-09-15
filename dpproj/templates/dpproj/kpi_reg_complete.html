@@ -1,19 +1,6 @@
 {% extends 'dpproj/headers.html' %}
 {% block content %}
-<script>
-  function makeTable(el,mydata) {
-    var tbl  = document.createElement("table");
-    tbl.style.width  = "70%";
-    $.each(mydata, function (key, val) {
-        var tr = tbl.insertRow();
-        tr.insertCell().appendChild(document.createTextNode(key.toString()));
-        tr.insertCell().appendChild(document.createTextNode(val.toString()));
-      });
-    el.appendChild(tbl)
-  };
 
-  makeTable($("#tableContent"),eval({{data|safe}}));
-</script>
 <!-- Menu Nav-->
 <div class="container-fluid">
   <div class="row">
@@ -22,11 +9,26 @@
     {{ message }}
     <main class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
       <section class="registration">
-        <div>{{data}}</div>
-        <div class="table" id="tableContent"></div>
+        <div class="table text-right" id="tableContent"></div>
       </section>
     </main>
   </div>
 </div>
+<script>
+  function makeTable(el,mydata) {
+    var tbl  = document.createElement("table");
+    tbl.style.width  = "70%";
+    tbl.border=1
+    $.each(mydata, function (key, val) {
+        var tr = tbl.insertRow();
+        tr.insertCell().appendChild(document.createTextNode(key.toString()));
+        tr.insertCell().appendChild(document.createTextNode(val.toString()));
+      });
+    $(tbl).appendTo(el)
+  };
+
+  makeTable($("#tableContent"),eval({{data|safe}}));
+  
+</script>
 
 {% endblock %}

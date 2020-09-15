@@ -68,7 +68,7 @@ class Visualization:
             #p.legend.orientation = "horizontal"
             #p.legend.location = "top_left"
             plots.append(p)
-        return json.dumps(json_item(gridplot(plots, ncols=2, sizing_mode="scale_width")))
+        return json.dumps(json_item(gridplot(plots, ncols=2, sizing_mode="fixed")))
 
 
             
