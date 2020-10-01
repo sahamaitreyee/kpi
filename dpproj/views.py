@@ -1,17 +1,19 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from urllib.parse import urlencode
-from .models import Login, Registration
+from .models import Login, Registration, Employee
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
 import logging
 from dpproj.RegistrationForm import RegistrationForm, UploadFileForm,SelectionForm
+from dpproj.employeeForm import EmployeeForm
 from collections import OrderedDict as SortedDict
 from xlrd import open_workbook, xldate_as_tuple
 from xlrd.sheet import XL_CELL_DATE
 from datetime import date, datetime, time
 from django.core import serializers
 from .visualization import Visualization
+from django.contrib.auth.models import User
 import json
 
 from bokeh.plotting import figure 
@@ -37,8 +39,7 @@ def login_validation(request):
         print(form.is_valid(), form.errors, type(form.errors))
         try:
             # check user exists in db
-            user = Login.objects.get(
-                user_name=form.cleaned_data.get('username'))
+            user = Login.objects.get(user_name=form.cleaned_data.get('username'))
         except(KeyError, Login.DoesNotExist):
             return render(request, 'dpproj/login.html',{"form":form,"error_message": "Register User"})
         # check user exists in django auth model
@@ -154,6 +155,30 @@ def get_visualization(request, user):
 
         return render(request, 'dpproj/kpi_visualization.html', {'user_email':user,"data":content, "form":SelectionForm() })
     else: 
+        return redirect('dpproj:index')
+
+def kpi_employee_regis(request, user):
+    if request.user.is_authenticated:
+        if request.method!='POST':
+            #prepopulate the data with user name
+            regis = EmployeeForm({'username':user},instance=Employee()) 
+            return render(request, 'dpproj/kpi_employee.html', {"user_email": user, "form": regis})
+        else:
+            form =EmployeeForm(request.POST)
+            if form.is_valid():
+                u=User.objects.get(username=form.cleaned_data.get('username'))
+                u.set_password(form.cleaned_data.get('newpassword'))
+                u.save()
+                form.fields['newpassword'].initials=''
+                instance=form.save()
+                save_data=serializers.serialize('json',Employee.objects.filter(pk=instance.id))
+                j=json.loads(save_data)
+                # get properties as dict
+                return render(request, 'dpproj/kpi_reg_complete.html', {"user_email": user, "data":j[0]['fields'], "message": "Update Successful", "form":RegistrationForm()})
+            else:
+                return render(request, 'dpproj/kpi_employee.html', {"user_email": user, "form": form, "error_message": "Invalid Data"})
+
+    else:
         return redirect('dpproj:index')
 
 #helper functions 

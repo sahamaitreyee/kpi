@@ -124,14 +124,14 @@ class Registration(models.Model):
 
     name=models.CharField(max_length=100)
     dob=models.DateField()
-    gender=models.CharField(max_length=6, choices=gender_info, default='female', blank=False)
+    gender=models.CharField(max_length=6, choices=gender_info, default='female', blank=True)
     aadhar_card_number=models.CharField(max_length=16)
     joining_date=models.DateField()
     last_passout_year=models.IntegerField()
-    graduate_degree=models.CharField(max_length=10,default='others',choices=deg_info, blank=False)
-    pg_degree=models.CharField(max_length=8, default='not done', choices=pg_deg_info, blank=False)
-    graduate_stream=models.CharField(max_length=9, default='NOT FOUND', choices=stream, blank=False)
-    pg_stream=models.CharField(max_length=9, default='NOT FOUND', choices=stream, blank=False)
+    graduate_degree=models.CharField(max_length=10,default='others',choices=deg_info, blank=True)
+    pg_degree=models.CharField(max_length=8, default='not done', choices=pg_deg_info, blank=True)
+    graduate_stream=models.CharField(max_length=9, default='NOT FOUND', choices=stream, blank=True)
+    pg_stream=models.CharField(max_length=9, default='NOT FOUND', choices=stream, blank=True)
     pg_yes_or_no=models.CharField(max_length=3,choices=yes_no, default='no')
     it_exp_months=models.IntegerField()
     non_it_exp_months=models.IntegerField()
@@ -142,7 +142,7 @@ class Registration(models.Model):
     pg_cgpa=models.FloatField()
     aptitude_score=models.IntegerField(default=0)
     have_laptop=models.CharField(max_length=10,choices=yes_no_notfound, default='No')
-    state_location=models.CharField(max_length=30,choices=state,blank=False)
+    state_location=models.CharField(max_length=30,choices=state,blank=True)
     district_location=models.CharField(max_length=30, default='na')
     purpuse_of_visit=models.CharField(max_length=10,choices=(('CLP','CLP'),('Internship','Internship')), default='Internship')
     college_name=models.CharField(max_length=50, blank=True)
@@ -155,13 +155,28 @@ class Registration(models.Model):
     domain_knowledge=models.CharField(max_length=10,choices=yes_no_Cap, default='No')
     previous_interviews_no=models.CharField(max_length=10,default='NotFound')
     selected_interviews=models.CharField(max_length=10,default='NotFound')
-    reference_source=models.CharField(max_length=30,choices=social_ref, blank=False)
+    reference_source=models.CharField(max_length=30,choices=social_ref, blank=True)
     status=models.CharField(max_length=100,choices=joining_status)
     joined_yes_no=models.CharField(max_length=3,choices=yes_no,default='no',blank=True)
     phone_number=models.IntegerField()
     mail_id=models.EmailField(default='a@a.com')
     feedback=models.CharField(max_length=100)
     
+
+    def __str__(self):
+        return '{}.{}.{}'.format(self.name,self.joining_date,self.graduate_degree)
+    class Meta:
+        ordering=['name']
+
+class Employee(models.Model):
+    username=models.CharField(max_length=100)
+    name=models.CharField(max_length=100, blank=True)
+    email=models.EmailField(default='a@a.com', blank=True)
+    employeeId=models.IntegerField(blank=True)
+    designation=models.CharField(max_length=100, blank=True)
+    department=models.CharField(max_length=20, blank=True)
+    newpassword=models.CharField(max_length=10, blank=True)
+
 
     def __str__(self):
         return '{}.{}.{}'.format(self.name,self.joining_date,self.graduate_degree)

@@ -2,9 +2,9 @@
 <div class="input-group mb-3 text-left table">
     {% for field in form %}
     <div class="form-group col-sm-6">
-        {{ field.errors }}
         <div class="text-right col-sm-4">{{ field.label_tag }} </div>
         <div class="text-left col-sm-2"> {{ field }}</div>
+        <div class="text-left col-sm-4">{{ field.errors }}</div>
         {% if field.help_text %}
         {% endif %}
     </div>

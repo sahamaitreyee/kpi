@@ -12,5 +12,6 @@ urlpatterns = [
     path('kpi/registration/<str:user>', views.kpi_registration, name='registration'),
     path('kpi/registration/complete/<str:user>',views.kpi_registration_complete,name='complete'),
     path('kpi/upload/<str:user>', views.kpi_upload, name='upload'),
-    path('kpi/visualiation/<str:user>',views.get_visualization, name='visual')
+    path('kpi/visualiation/<str:user>',views.get_visualization, name='visual'),
+    path('kpi/employee/<str:user>', views.kpi_employee_regis,  name='empreg')
 ]

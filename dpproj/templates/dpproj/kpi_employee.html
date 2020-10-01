@@ -1,15 +1,17 @@
 {% extends 'dpproj/headers.html' %}
 {% block content %}
-
+<script>
+  if (window.history.replaceState) {
+    window.history.replaceState(null, null, window.location.href);
+  }
+</script>
 <!-- Menu Nav-->
 <div class="container-fluid">
   <div class="row">
-    <!-- left menu -->
     {% include 'dpproj/kpi_menu.html' %}
-
-
     <p>Welcome {{user_email}}</p>
     <main class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+
       <!-- other messages and alerts -->
       {% if error_message %}
       <div class="alert alert-danger" role="alert">
@@ -22,18 +24,12 @@
       </div>
       {% endif %}
 
-
-      <!-- main form -->
-      <form action="{% url 'dpproj:upload' user_email %}" method="post" class="form-inline text-center"
-        enctype="multipart/form-data">
-        <!-- common rendering of element-->
+      <form method="POST" action="{% url 'dpproj:empreg' user_email %}">
         {% include 'dpproj/kpi_render_form.html' %}
-        <button type="submit" class="btn btn-secondary">Upload</button>
+        <button class="btn btn-lg btn-primary" type="submit">Update</button>
       </form>
-
 
     </main>
   </div>
-</div>
 
-{% endblock %}
+  {% endblock %}

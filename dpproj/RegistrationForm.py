@@ -15,7 +15,7 @@ class RegistrationForm(ModelForm):
             'feedback':forms.Textarea()
         }
         labels = {
-            'name': _('Candidate Name'),
+            'name': _('Name'),
             'dob': _('Date Of Birth'),
             'gender': _('Gender'),
             'aadhar_card_number': _('Aadhar Card No'),
@@ -30,7 +30,6 @@ class RegistrationForm(ModelForm):
             'non_it_exp_months': _('Non IT Exp (Months)'),
             'freshers': _('Freshers'),
             'feedback':_('Feedback')
-
         }
       
 
