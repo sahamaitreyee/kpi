@@ -62,7 +62,7 @@ def logout_user(request):
 
 def kpi(request, user):
     if request.user.is_authenticated:
-        return render(request, 'dpproj/kpi_home.html', {"user_email": user,  "data": Registration.objects.count()})
+        return render(request, 'dpproj/kpi_home.html', {"user_email": user, "superuser":request.user.is_superuser , "data": Registration.objects.count()})
     else:
         return redirect('dpproj:index')
 
@@ -70,7 +70,7 @@ def kpi(request, user):
 def kpi_registration(request, user):
     if request.user.is_authenticated:
         regis = RegistrationForm()
-        return render(request, 'dpproj/kpi_registration.html', {"user_email": user, "form": regis})
+        return render(request, 'dpproj/kpi_registration.html', {"user_email": user, "form": regis, "superuser":request.user.is_superuser})
     else:
         return redirect('dpproj:index')
 
@@ -79,7 +79,7 @@ def kpi_registration_complete(request, user):
     if request.user.is_authenticated:
         if request.method != 'POST':
             regis = RegistrationForm()
-            return render(request, 'dpproj/kpi_registration.html', {"user_email": user, "form": regis})
+            return render(request, 'dpproj/kpi_registration.html', {"user_email": user, "form": regis,"superuser":request.user.is_superuser})
         else:
             form = RegistrationForm(request.POST)
             if form.is_valid():
@@ -87,9 +87,9 @@ def kpi_registration_complete(request, user):
                 save_data=serializers.serialize('json',Registration.objects.filter(pk=instance.id))
                 j=json.loads(save_data)
                 # get properties as dict
-                return render(request, 'dpproj/kpi_reg_complete.html', {"user_email": user, "data":j[0]['fields'], "message": "Registation Successful", "form":RegistrationForm()})
+                return render(request, 'dpproj/kpi_reg_complete.html', {"user_email": user, "data":j[0]['fields'], "message": "Registation Successful", "form":RegistrationForm(), "superuser":request.user.is_superuser})
             else:
-                return render(request, 'dpproj/kpi_registration.html', {"user_email": user, "form": form, "error_message": "Invalid Data"})
+                return render(request, 'dpproj/kpi_registration.html', {"user_email": user, "form": form, "error_message": "Invalid Data", "superuser":request.user.is_superuser})
     else:
         return redirect('dpproj:index')
 
@@ -97,7 +97,7 @@ def kpi_registration_complete(request, user):
 def kpi_upload(request, user):
     if request.user.is_authenticated:
         if request.method != 'POST':
-            return render(request, 'dpproj/kpi_upload.html', {"user_email": user, "form": UploadFileForm()})
+            return render(request, 'dpproj/kpi_upload.html', {"user_email": user, "form": UploadFileForm(), "superuser":request.user.is_superuser})
         else:
             form = UploadFileForm(request.POST, request.FILES)
             if form.is_valid():
@@ -115,14 +115,14 @@ def kpi_upload(request, user):
                             else:
                                 error.append("Row{}.{}".format(count,d.errors))
                 except Exception as e:
-                    return render(request, 'dpproj/kpi_upload.html', {"user_email": user, "form": UploadFileForm(), "message": "Invalid Excel.{}".format(e)})
+                    return render(request, 'dpproj/kpi_upload.html', {"user_email": user, "form": UploadFileForm(), "superuser":request.user.is_superuser,"message": "Invalid Excel.{}".format(e)})
                 else:
                     if len(error)>0:
-                        return render(request, 'dpproj/kpi_upload.html', {"user_email": user, "form": UploadFileForm(), "error_message": "Falied for Some row.{}".format(error)})
+                        return render(request, 'dpproj/kpi_upload.html', {"user_email": user, "superuser":request.user.is_superuser,"form": UploadFileForm(), "error_message": "Falied for Some row.{}".format(error)})
                     else:
-                        return render(request, 'dpproj/kpi_upload.html', {"user_email": user, "form": UploadFileForm(), "message": "excel upload successful"})
+                        return render(request, 'dpproj/kpi_upload.html', {"user_email": user, "superuser":request.user.is_superuser, "form": UploadFileForm(), "message": "excel upload successful"})
             else:
-                return render(request, 'dpproj/kpi_upload.html', {"user_email": user, "form": UploadFileForm()})
+                return render(request, 'dpproj/kpi_upload.html', {"user_email": user, "form": UploadFileForm(), "superuser":request.user.is_superuser})
 
     else:
         return redirect('dpproj:index')
@@ -130,7 +130,7 @@ def kpi_upload(request, user):
 def get_visualization(request, user):
     if request.user.is_authenticated:
         if request.method != 'POST':
-            return render(request, 'dpproj/kpi_visualization.html', {"user_email": user, "form": SelectionForm()})
+            return render(request, 'dpproj/kpi_visualization.html', {"user_email": user, "superuser":request.user.is_superuser,"form": SelectionForm()})
         else:
             try:
                 form = SelectionForm(request.POST)
@@ -142,7 +142,7 @@ def get_visualization(request, user):
                 if(choice=='BAR'):
                     content=v.get_bar_plots(fields=['last_passout_year','it_exp_months','state_location'])
                 else:
-                    content=v.get_charts(fields=['gender','graduate_stream','pg_stream'])
+                    content=v.get_charts(fields=['graduate_degree', 'pg_degree'])
                 
             except Exception  as e:
                 return render(request,'dpproj/kpi_visualization.html', 
@@ -153,7 +153,7 @@ def get_visualization(request, user):
                     }
                 )
 
-        return render(request, 'dpproj/kpi_visualization.html', {'user_email':user,"data":content, "form":SelectionForm() })
+        return render(request, 'dpproj/kpi_visualization.html', {'user_email':user,"data":content, "form":SelectionForm(), "superuser":request.user.is_superuser })
     else: 
         return redirect('dpproj:index')
 
@@ -162,21 +162,22 @@ def kpi_employee_regis(request, user):
         if request.method!='POST':
             #prepopulate the data with user name
             regis = EmployeeForm({'username':user},instance=Employee()) 
-            return render(request, 'dpproj/kpi_employee.html', {"user_email": user, "form": regis})
+            return render(request, 'dpproj/kpi_employee.html', {"user_email": user, "form": regis, "superuser":request.user.is_superuser})
         else:
             form =EmployeeForm(request.POST)
             if form.is_valid():
                 u=User.objects.get(username=form.cleaned_data.get('username'))
                 u.set_password(form.cleaned_data.get('newpassword'))
                 u.save()
-                form.fields['newpassword'].initials=''
-                instance=form.save()
+                instance=form.save(commit=False)
+                instance.newpassword=''
+                instance.save()
                 save_data=serializers.serialize('json',Employee.objects.filter(pk=instance.id))
                 j=json.loads(save_data)
                 # get properties as dict
-                return render(request, 'dpproj/kpi_reg_complete.html', {"user_email": user, "data":j[0]['fields'], "message": "Update Successful", "form":RegistrationForm()})
+                return render(request, 'dpproj/kpi_reg_complete.html', {"user_email": user, "data":j[0]['fields'], "message": "Update Successful", "form":RegistrationForm(), "superuser":request.user.is_superuser})
             else:
-                return render(request, 'dpproj/kpi_employee.html', {"user_email": user, "form": form, "error_message": "Invalid Data"})
+                return render(request, 'dpproj/kpi_employee.html', {"user_email": user, "form": form, "error_message": "Invalid Data",  "superuser":request.user.is_superuser})
 
     else:
         return redirect('dpproj:index')
